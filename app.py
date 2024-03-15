@@ -9,9 +9,12 @@ class MerkleTree:
     def hash_data(self, data=None):
         return sha256(data.encode() if data else bytes(0)).hexdigest()
     
+    def hash_lr(self, left, right):
+        return self.hash_data(left + right)
+    
     def __set_zero_roots(self):
         t_hash = self.hash_data()
         self.zero_roots.append(t_hash)
         for i in range(1, self.depth):
-            t_hash = self.hash_data(t_hash + t_hash)
+            t_hash = self.hash_lr(t_hash, t_hash)
             self.zero_roots.append(t_hash)
