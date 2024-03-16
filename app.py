@@ -21,8 +21,11 @@ class MerkleTree:
             t_hash = self.hash_lr(t_hash, t_hash)
             self.zero_roots.append(t_hash)
     
+    def is_tree_full(self):
+        return True if self.__current_insert_idx >= 2 ** (self.depth - 1) else False
+    
     def insert_leaf(self, data):
-        if self.__current_insert_idx >= 2 ** (self.depth - 1):
+        if self.is_tree_full():
             print("Merkle Tree is Full.")
             return
         
