@@ -47,3 +47,6 @@ class MerkleTree:
             else: self.__tree[i][curr_idx] = curr_hash 
         
         self.__current_insert_idx += 1
+    
+    def get_root(self):
+        return self.__tree[-1][0]
