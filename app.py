@@ -50,3 +50,7 @@ class MerkleTree:
     
     def get_root(self):
         return self.__tree[-1][0]
+    
+    def get_leaf_index(self, data):
+        leaf_hash = self.hash_data(data)
+        return self.__tree[0].index(leaf_hash) if leaf_hash in self.__tree[0] else -1
