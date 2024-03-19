@@ -12,7 +12,8 @@ class MerkleTree:
         return sha256(data.encode() if data else bytes(0)).hexdigest()
     
     def hash_lr(self, left, right):
-        return self.hash_data(left + right)
+        lr = hex(int(left, 16) + int(right, 16))[2: ]
+        return self.hash_data(lr)
     
     def __set_zero_roots(self):
         t_hash = self.hash_data()
@@ -49,7 +50,7 @@ class MerkleTree:
         self.__current_insert_idx += 1
     
     def get_root(self):
-        return self.__tree[-1][0]
+        return self.__tree[-1][0] if len(self.__tree[-1]) == 1 else self.zero_roots[-1]
     
     def get_leaf_index(self, data):
         leaf_hash = self.hash_data(data)
