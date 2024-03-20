@@ -55,3 +55,40 @@ class MerkleTree:
     def get_leaf_index(self, data):
         leaf_hash = self.hash_data(data)
         return self.__tree[0].index(leaf_hash) if leaf_hash in self.__tree[0] else -1
+    
+    def get_node(self, level, idx):
+        if not 0 <= level < self.depth:
+            print("Invalid Level")
+            return
+        if not 0 <= idx < 2 ** (self.depth - level - 1):
+            print("Invalid Index")
+            return
+        
+        node_value = self.__tree[level][idx] if len(self.__tree[level]) > idx else self.zero_roots[level]
+        return node_value
+    
+    def get_leaf(self, leaf_idx):
+        if not 0 <= leaf_idx < 2 ** (self.depth - 1):
+            print("Invalid Index")
+            return
+        
+        return self.__tree[0][leaf_idx] if len(self.__tree[0]) > leaf_idx else self.zero_roots[0]
+    
+    def get_path(self, leaf_idx):
+        if not 0 <= leaf_idx < 2 ** (self.depth - 1):
+            print("Invalid Index")
+            return
+        
+        path = []
+        curr_idx = leaf_idx
+        for i in range(self.depth):
+            if curr_idx % 2 == 0: # even -> left child
+                neigh_idx = curr_idx + 1
+            else: # odd -> right child
+                neigh_idx = curr_idx - 1
+            
+            neigh = self.__tree[i][neigh_idx] if len(self.__tree[i]) > neigh_idx else self.zero_roots[i]
+            path.append(neigh)
+            curr_idx = curr_idx // 2 # parent index
+        
+        return path
