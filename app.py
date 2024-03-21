@@ -1,6 +1,6 @@
 from hashlib import sha256
 
-class MerkleTree:
+class IncrementalMerkleTree:
     def __init__(self, depth):
         self.depth = depth
         self.zero_roots = list()
