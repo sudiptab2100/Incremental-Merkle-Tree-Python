@@ -81,7 +81,7 @@ class IncrementalMerkleTree:
         
         path = []
         curr_idx = leaf_idx
-        for i in range(self.depth):
+        for i in range(self.depth - 1):
             if curr_idx % 2 == 0: # even -> left child
                 neigh_idx = curr_idx + 1
             else: # odd -> right child
@@ -92,3 +92,14 @@ class IncrementalMerkleTree:
             curr_idx = curr_idx // 2 # parent index
         
         return path
+    
+    def is_tree_member(self, leaf, path):
+        if len(path) != self.depth - 1:
+            print("Invalid Path")
+            return
+        
+        root = leaf
+        for p in path:
+            root = self.hash_lr(root, p)
+        
+        return root == self.get_root()
