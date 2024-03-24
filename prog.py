@@ -1,12 +1,29 @@
 from hashlib import sha256
+import pickle
+
 
 class IncrementalMerkleTree:
-    def __init__(self, depth):
-        self.depth = depth
-        self.zero_roots = list()
-        self.__set_zero_roots()
-        self.__tree = [[] for i in range(depth)]
-        self.__current_insert_idx = 0
+    def __init__(self, depth, load_from_file=False, file_path='files/merkle_tree.pkl'):
+        if load_from_file:
+            try:
+                with open(file_path, 'rb') as f:
+                    loaded_tree = pickle.load(f)
+                self.depth = loaded_tree.depth
+                self.zero_roots = loaded_tree.zero_roots
+                self.__tree = loaded_tree.__tree
+                self.__current_insert_idx = loaded_tree.__current_insert_idx
+            except FileNotFoundError:
+                print(f"No such file: '{file_path}'")
+                return
+            except Exception as e:
+                print(f"Error loading tree from file: {e}")
+                return
+        else:
+            self.depth = depth
+            self.zero_roots = list()
+            self.__set_zero_roots()
+            self.__tree = [[] for i in range(depth)]
+            self.__current_insert_idx = 0
     
     def hash_data(self, data=None):
         return sha256(data.encode() if data else bytes(0)).hexdigest()
@@ -103,3 +120,7 @@ class IncrementalMerkleTree:
             root = self.hash_lr(root, p)
         
         return root == self.get_root()
+    
+    def store_tree(self, loc='files/merkle_tree.pkl'):
+        with open(loc, 'wb') as f:
+            pickle.dump(self, f)
