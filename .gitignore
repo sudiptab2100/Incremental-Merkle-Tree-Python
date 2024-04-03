@@ -1,3 +1,4 @@
 env/
 files/*
+!files/c_values.json
 __pycache__
