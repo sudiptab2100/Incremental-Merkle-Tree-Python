@@ -1,4 +1,4 @@
 env/
 files/*
-!files/c_values.json
+!files/MiMC_settings.json
 __pycache__
