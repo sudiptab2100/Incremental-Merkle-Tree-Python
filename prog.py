@@ -29,8 +29,9 @@ class IncrementalMerkleTree:
         return sha256(data.encode() if data else bytes(0)).hexdigest()
     
     def hash_lr(self, left, right):
-        lr = hex(int(left, 16) + int(right, 16))[2: ]
-        return self.hash_data(lr)
+        # lr = hex(int(left, 16) + int(right, 16))[2: ]
+        # return self.hash_data(lr)
+        return self.hash_data(left + right)
     
     def __set_zero_roots(self):
         t_hash = self.hash_data()
@@ -99,13 +100,15 @@ class IncrementalMerkleTree:
         path = []
         curr_idx = leaf_idx
         for i in range(self.depth - 1):
+            neigh_side = 0 # 0 -> left, 1 -> right
             if curr_idx % 2 == 0: # even -> left child
                 neigh_idx = curr_idx + 1
+                neigh_side = 1
             else: # odd -> right child
                 neigh_idx = curr_idx - 1
             
             neigh = self.__tree[i][neigh_idx] if len(self.__tree[i]) > neigh_idx else self.zero_roots[i]
-            path.append(neigh)
+            path.append((neigh_side, neigh))
             curr_idx = curr_idx // 2 # parent index
         
         return path
@@ -116,8 +119,11 @@ class IncrementalMerkleTree:
             return
         
         root = leaf
-        for p in path:
-            root = self.hash_lr(root, p)
+        for side, hs in path:
+            if side == 1:
+                root = self.hash_lr(root, hs)
+            else:
+                root = self.hash_lr(hs, root)
         
         return root == self.get_root()
     
