@@ -1,5 +1,6 @@
 from hashlib import sha256
 import pickle
+from MiMC5Sponge import MiMC5Sponge
 
 
 class IncrementalMerkleTree:
@@ -26,12 +27,11 @@ class IncrementalMerkleTree:
             self.__current_insert_idx = 0
     
     def hash_data(self, data=None):
-        return sha256(data.encode() if data else bytes(0)).hexdigest()
+        return int(sha256(data.encode() if data else bytes(0)).hexdigest(), 16)
     
     def hash_lr(self, left, right):
-        # lr = hex(int(left, 16) + int(right, 16))[2: ]
-        # return self.hash_data(lr)
-        return self.hash_data(left + right)
+        hasher = MiMC5Sponge()
+        return hasher.hash([left, right])
     
     def __set_zero_roots(self):
         t_hash = self.hash_data()
