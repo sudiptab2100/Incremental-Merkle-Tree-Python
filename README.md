@@ -10,3 +10,10 @@ Incremental Merkle Tree is a specialized form of a Merkle tree designed to allow
     The structure can grow dynamically as new elements are added, making it suitable for scenarios where the dataset size isn't fixed.
 - ### Proofs
     Similar to traditional Merkle trees, the IMT allows for the creation of Merkle proofs, which prove the inclusion of a particular element in the tree without revealing other elements.
+
+## Code
+
+- #### `prog.py`
+    Incremental Merkle Tree class implemented with all the functionalities.
+- #### `MiMC5Sponge.py`
+    Implementation of MiMC5Sponge hasher. MiMC is a hash function family specially designed for SNARK applications. The low multiplicative complexity of MiMC over prime fields makes it suitable for ZK-SNARK applications
